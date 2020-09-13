@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+    </head>
+
+    <body>
+        {% if texts %}
+            {% for text in texts %}
+                <h2>{{ text.file_name }}</h2>
+                <br>
+                {{ text.content }}
+                <hr><br>
+            {% endfor %}
+        {% else %}
+            <h2>No matches</h2>
+            <br>
+        {% endif %}
+        <br>
+        <a href="{{ search_page_url }}">go to search</a>
+    </body>
+
+</html>
