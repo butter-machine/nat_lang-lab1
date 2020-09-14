@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView
 
 from Lab_1.forms import SearchForm
-from Lab_1.services import DocumentSearchService, DatabaseService, SearchTokenizer, IndexService
+from Lab_1.services.search_services import SearchTokenizer, DocumentSearchService
 
 
 class IndexView(TemplateView):
@@ -19,9 +19,7 @@ def search_form_view(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             tokenizer = SearchTokenizer()
-            database_service = DatabaseService()
-            indexer = IndexService(tokenizer, database_service)
-            search_service = DocumentSearchService(tokenizer, indexer)
+            search_service = DocumentSearchService(tokenizer)
 
             request.session['texts'] = search_service.search(request.POST['search'])
             return HttpResponseRedirect(reverse('result'))
