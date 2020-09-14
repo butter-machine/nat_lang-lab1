@@ -11,6 +11,23 @@
                 <br>
                 {{ text.content }}
                 <hr><br>
+                <details>
+                    <summary>Tokens</summary>
+                    <table style="width:100%">
+                        <tr>
+                            <th>Token</th>
+                            <th>In file entries</th>
+                            <th>Key word coefficient</th>
+                        </tr>
+                        {% for token in text.tokens %}
+                            <tr>
+                                <td>{{ token.token }}</td>
+                                <td>{{ token.count }}</td>
+                                <td>{{ token.key_word_coefficient }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </details>
             {% endfor %}
         {% else %}
             <h2>No matches</h2>

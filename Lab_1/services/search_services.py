@@ -1,6 +1,7 @@
 import os
 
 import nltk
+from django.db.models import Q, F
 from nltk.corpus import stopwords
 
 from Lab_1.models.models import FileModel, FileToken
@@ -37,17 +38,25 @@ class DocumentSearchService:
 
     def search(self, search_string):
         search_tokens = self.search_tokenizer.tokenize(search_string)
-        search_queryset = FileModel.objects.filter(
+        search_result = FileModel.objects.filter(
             filetoken__in=FileToken.objects.filter(token__in=search_tokens),
             filetoken__key_word_coefficient__gte=KEY_WORDS_COEFFICIENT
-        )
+        ).values('pk', 'file_name')
 
-        search_results = []
-        for file_model in search_queryset:
-            with open(file_model.file_name, 'r') as storage_file:
+        for result in search_result:
+            with open(result['file_name'], 'r') as storage_file:
                 content = storage_file.read()
-            file_name = os.path.basename(file_model.file_name)
+            result['content'] = content
+            result['tokens'] = sorted(
+                list(
+                    FileToken.objects.filter(file_id=result['pk']).values(
+                        'token',
+                        'key_word_coefficient',
+                        'count'
+                    )
+                ),
+                key=lambda x: x['key_word_coefficient'],
+                reverse=True
+            )
 
-            search_results.append({'file_name': file_name, 'content': content})
-
-        return search_results
+        return list(search_result)
