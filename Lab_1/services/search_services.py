@@ -1,7 +1,4 @@
-import os
-
 import nltk
-from django.db.models import Q, F
 from nltk.corpus import stopwords
 
 from Lab_1.models.models import FileModel, FileToken
