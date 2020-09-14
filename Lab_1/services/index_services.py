@@ -2,6 +2,7 @@ import math
 import os
 
 from django.core.files.base import ContentFile
+from tqdm import tqdm
 
 from Lab_1 import settings
 from Lab_1.models.models import FileModel, FileToken
@@ -72,9 +73,12 @@ class IndexService:
             self.database_service.add_file(content_file)
 
         file_models_queryset = FileModel.objects.all()
-        for file_model in file_models_queryset:
-            file_content = self._open_file(file_model.file_name)
-            file_tokens = self.search_tokenizer.tokenize(file_content.read())
+        for file_model in tqdm(file_models_queryset):
+            content_file = self._open_file(file_model.file_name)
+            if FileModel.objects.by_file(content_file) is not None:
+                continue
+
+            file_tokens = self.search_tokenizer.tokenize(content_file.read())
             token_models = self.database_service.add_tokens(file_model, file_tokens)
 
             for token_model in token_models:

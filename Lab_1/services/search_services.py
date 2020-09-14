@@ -38,8 +38,8 @@ class DocumentSearchService:
     def search(self, search_string):
         search_tokens = self.search_tokenizer.tokenize(search_string)
         search_queryset = FileModel.objects.filter(
-            tokens__in=FileToken.objects.filter(token__in=search_tokens),
-            token_key_word_coefficient__gte=KEY_WORDS_COEFFICIENT
+            filetoken__in=FileToken.objects.filter(token__in=search_tokens),
+            filetoken__key_word_coefficient__gte=KEY_WORDS_COEFFICIENT
         )
 
         search_results = []
