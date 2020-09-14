@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from Lab_1.views import IndexView, search_form_view, ResultView
 
@@ -23,4 +25,4 @@ urlpatterns = [
     path('', IndexView.as_view()),
     path('search/', search_form_view, name='search'),
     path('search/result/', ResultView.as_view(), name='result')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

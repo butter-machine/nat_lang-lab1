@@ -7,7 +7,9 @@
     <body>
         {% if texts %}
             {% for text in texts %}
-                <h2>{{ text.file_name }}</h2>
+                <a href="{{ text.link }}" >
+                    <h2>{{ text.file_short_name }}</h2>
+                </a>
                 <br>
                 {{ text.content }}
                 <hr><br>

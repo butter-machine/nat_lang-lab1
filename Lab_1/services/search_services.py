@@ -1,8 +1,10 @@
+import os
+
 import nltk
 from nltk.corpus import stopwords
 
 from Lab_1.models.models import FileModel, FileToken
-from Lab_1.settings import KEY_WORDS_COEFFICIENT
+from Lab_1.settings import KEY_WORDS_COEFFICIENT, BASE_URL
 
 nltk.download('averaged_perceptron_tagger')
 nltk.download('stopwords')
@@ -41,6 +43,10 @@ class DocumentSearchService:
         ).values('pk', 'file_name')
 
         for result in search_result:
+            result['file_short_name'] = os.path.basename(result['file_name'])
+
+            result['link'] = ''.join(['http://', BASE_URL, '/files/', result['file_short_name']])
+
             with open(result['file_name'], 'r') as storage_file:
                 content = storage_file.read()
             result['content'] = content
