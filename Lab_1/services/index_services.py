@@ -75,7 +75,8 @@ class IndexService:
         file_models_queryset = FileModel.objects.all()
         for file_model in tqdm(file_models_queryset):
             content_file = self._open_file(file_model.file_name)
-            if FileModel.objects.by_file(content_file) is not None:
+            file_model = FileModel.objects.by_file(content_file)
+            if file_model.processed:
                 continue
 
             file_tokens = self.search_tokenizer.tokenize(content_file.read())
@@ -89,3 +90,5 @@ class IndexService:
                 )
 
                 self.database_service.update_token_model_wit_key_word_coefficient(token_model, coefficient)
+
+            file_model.processed = True

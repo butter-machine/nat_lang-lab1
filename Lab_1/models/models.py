@@ -6,6 +6,7 @@ from Lab_1.models.querysets import FileModelQuerySet
 class FileModel(models.Model):
     file_name = models.CharField(max_length=512)
     file_size = models.PositiveSmallIntegerField()
+    processed = models.BooleanField(default=False)
 
     objects = FileModelQuerySet.as_manager()
 
