@@ -92,3 +92,4 @@ class IndexService:
                 self.database_service.update_token_model_wit_key_word_coefficient(token_model, coefficient)
 
             file_model.processed = True
+            file_model.save()
